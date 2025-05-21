@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gabrielle Fernandes Blog</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{% static 'img/gabrielle.png' %}" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"IBM Plex Mono"', 'sans-serif'],
+              serif: ['"IBM Plex Serif"', 'serif'],
+              mono: ['"JetBrains Mono"', 'monospace']
+            },
+            colors: {
+              primary: '#58A6FF',
+              secondary: '#6b7280'
+            },
+            fontSize: {
+              title: '1.25rem',
+              subtitle: '1.125rem',
+              sm: '0.875rem',
+              xs: '0.75rem'
+            },
+            animation: {
+              fadeInDown: 'fadeInDown 0.8s ease-out forwards'
+            },
+            keyframes: {
+              fadeInDown: {
+                '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+
+  <body class="bg-white text-gray-900 min-h-screen px-6 py-10 font-sans leading-relaxed antialiased">
+    <!-- Header com fade-in -->
+
+    <header class="max-w-2xl mx-auto pb-24 pt-12 animate-fadeInDown">
+      <img src="{% static 'image/gabrielle.png' %}" alt="Imagem pixelada de Gabrielle" class="w-32 h-32 rounded-full shadow-md object-cover" />
+
+      <div class="flex items-center gap-3 mt-6">
+        <h1 class="text-4xl font-serif font-bold">Gabrielle Fernandes</h1>
+      </div>
+      <p class="text-lg mt-4">Olá! 👋 Esse é o meu cantinho na internet. Seja bem-vindo(a)!</p>
+    </header>
+
+    <!-- Lista de Posts com fade-in -->
+    <main class="max-w-2xl mx-auto animate-fadeInDown">
+      {% for post in posts %}
+        <article class="py-6 {% if not forloop.last %}border-b border-gray-200 mb-12{% endif %}">
+  <a href="{% url 'post:post_detail' post.slug %}" class="group block">
+    <!-- Título -->
+    <h2 class="text-2xl font-serif font-bold text-gray-900 group-hover:underline underline-offset-4 transition duration-200">{{ post.titulo }}</h2>
+
+    <!-- Subtítulo / Descrição -->
+    <p class="text-gray-700 text-base mt-2 leading-relaxed">{{ post.descricao }}</p>
+
+    <!-- Data -->
+    <div class="flex items-center gap-8 mt-2">
+      <time class="text-xs text-gray-500 whitespace-nowrap">
+        {{ post.data|date:'d-m-Y' }} | {{ post.data|time:'H:i' }}
+      </time>
+
+      <div class="flex flex-wrap gap-3">
+        {% for tag in post.tags.all %}
+          <span class="text-xs px-1.5 py-0.5 rounded border border-gray-200 bg-gray-50 text-gray-400 lowercase">
+            #{{ tag.nome|slugify }}
+          </span>
+        {% empty %}
+          <span class="text-xs text-gray-400 italic">sem tags</span>
+        {% endfor %}
+      </div>
+    </div>
+  </a>
+</article>
+
+      {% empty %}
+        <p class="text-gray-500 text-sm">Nenhum post encontrado.</p>
+      {% endfor %}
+    </main>
+
+    <!-- Rodapé -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <footer class="max-w-2xl mx-auto mt-24 py-6 text-center text-gray-500 text-xs border-t border-gray-200 pt-24 space-y-4">
+      <p class="text-sm text-gray-700">Tem alguma dúvida ou sugestão? Me encontre aqui:</p>
+
+      <!-- Links Sociais -->
+      <div class="flex justify-center gap-6 text-sm">
+        <a href="https://www.linkedin.com/in/gabrielle-alves-fernandes/" target="_blank" class="flex items-center gap-1 text-gray-600 hover:text-primary transition">
+          <i data-lucide="linkedin" class="w-4 h-4"></i>
+          LinkedIn
+        </a>
+        <a href="https://www.instagram.com/gabrielle.fernands/?hl=pt" target="_blank" class="flex items-center gap-1 text-gray-600 hover:text-primary transition">
+          <i data-lucide="instagram" class="w-4 h-4"></i>
+          Instagram
+        </a>
+        <a href="mailto:seu@email.com" class="flex items-center gap-1 text-gray-600 hover:text-primary transition">
+          <i data-lucide="mail" class="w-4 h-4"></i>
+          Email
+        </a>
+      </div>
+
+      <p>
+        ©{% now 'Y' %}- Gabrielle Fernandes. Todos os direitos reservados.
+      </p>
+    </footer>
+
+    <script>
+      lucide.createIcons() // Ativa os ícones do Lucide
+    </script>
+  </body>
+</html>
